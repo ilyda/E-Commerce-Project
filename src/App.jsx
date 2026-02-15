@@ -16,7 +16,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import Basket from "./pages/Basket";
 import PlaceOrder from "./pages/PlaceOrder";
-import OrderSuccess from "./pages/orderSuccess";
+import OrderSuccess from "./pages/OrderSuccess";
 function App() {
   return (
     <>
