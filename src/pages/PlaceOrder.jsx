@@ -48,7 +48,7 @@ export default function PlaceOrder() {
       const res = await api.get("/user/address");
       setAddresses(res.data);
     } catch {
-      toast.error("Addresses could not load");
+      navigate("/login")
     }
   };
 
