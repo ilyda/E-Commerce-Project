@@ -1,0 +1,58 @@
+[
+  {
+    "id": "2",
+    "name": "Graphic Design",
+    "price": 16.48,
+    "discounted": 6.48,
+    "description": "Met minim Mollie non desert Alamo est sit cliquey dolordo met sent. RELIT official consequent door ENIM RELIT Mollie. xcitation venial consequent sent nostrum met.",
+    "imageKey": "carousel_inner",
+    "gallery": ["carousel_inner", "carousel_inner"],
+    "features": [
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog"
+    ]
+  },  {
+    "id": "1",
+    "name": "Graphic Design",
+    "price": 16.48,
+    "discounted": 6.48,
+    "description": "Met minim Mollie non desert Alamo est sit cliquey dolordo met sent. RELIT official consequent door ENIM RELIT Mollie. xcitation venial consequent sent nostrum met.",
+    "imageKey": "carousel_inner",
+    "gallery": ["carousel_inner", "carousel_inner"],
+    "features": [
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog"
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Graphic Design",
+    "price": 16.48,
+    "discounted": 6.48,
+    "description": "Met minim Mollie non desert Alamo est sit cliquey dolordo met sent. RELIT official consequent door ENIM RELIT Mollie. xcitation venial consequent sent nostrum met.",
+    "imageKey": "carousel_inner",
+    "gallery": ["carousel_inner", "carousel_inner"],
+    "features": [
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog"
+    ]
+  },
+
+   {
+    "id": "3",
+    "name": "Graphic Design",
+    "price": 16.48,
+    "discounted": 6.48,
+    "description": "Met minim Mollie non desert Alamo est sit cliquey dolordo met sent. RELIT official consequent door ENIM RELIT Mollie. xcitation venial consequent sent nostrum met.",
+    "imageKey": "carousel_inner",
+    "gallery": ["carousel_inner", "carousel_inner"],
+    "features": [
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog",
+      "the quick fox jumps over the lazy dog"
+    ]
+  }
+]
