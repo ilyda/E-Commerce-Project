@@ -21,7 +21,7 @@ export const TeamHeroSection = () => {
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-16">
     <div class="w-full">
       <img 
-        src="/src/assets/hero1.png"
+       src={assets.hero1}
         class="w-full h-full object-cover"
       />
     </div>
