@@ -1,3 +1,4 @@
+import { assets } from "../assets/assets";
 
 
 export const TeamHeroSection = () => {
@@ -25,10 +26,10 @@ export const TeamHeroSection = () => {
       />
     </div>
     <div class="grid grid-cols-2 gap-4">
-      <img src="/src/assets/hero2.png" class="w-full h-full object-cover" />
-      <img src="/src/assets/hero3.png" class="w-full h-full object-cover" />
-      <img src="/src/assets/hero4.png" class="w-full h-full object-cover" />
-      <img src="/src/assets/hero5.png" class="w-full h-full object-cover" />
+      <img src={assets.hero2} class="w-full h-full object-cover" />
+      <img src={assets.hero3} class="w-full h-full object-cover" />
+      <img src={assets.hero4} class="w-full h-full object-cover" />
+      <img src={assets.hero5} class="w-full h-full object-cover" />
     </div>
 
   </div>

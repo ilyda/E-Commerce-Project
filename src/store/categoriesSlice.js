@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api/axios";
+import axios from "axios";
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get("/categories");
+      const res = await axios.get("https://workintech-fe-ecommerce.onrender.com/categories");
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data || err.message);
+      return rejectWithValue(err.response?.data || "Error fetching categories");
     }
   }
 );
@@ -18,6 +18,7 @@ const categoriesSlice = createSlice({
   initialState: {
     list: [],
     status: "idle",
+    error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -29,8 +30,9 @@ const categoriesSlice = createSlice({
         state.status = "succeeded";
         state.list = action.payload;
       })
-      .addCase(fetchCategories.rejected, (state) => {
+      .addCase(fetchCategories.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.payload;
       });
   },
 });

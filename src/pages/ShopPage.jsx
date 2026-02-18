@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useContext, useEffect } from "react";
+import { useParams } from "react-router-dom"; // ✅ import ekle
 import { LayoutGrid, List } from "lucide-react";
 import ProductItem from "../components/ProductItem";
 import BreadCrumbSection from "../components/BreadCrumbSection";
@@ -13,17 +14,32 @@ const ShopPage = () => {
     total,
     limit,
     setOffset,
+    setCategoryId, // ✅ context’ten ekle
   } = useContext(ShopContext);
 
   const [viewMode, setViewMode] = useState("grid");
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { categoryId } = useParams(); // ✅ useParams
 
+  // CategoryId değişirse offset sıfırlanır ve context’e gönderilir
+  useEffect(() => {
+    if (categoryId) {
+      setCategoryId(Number(categoryId));
+      setOffset(0);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCurrentPage(1);
+    }
+  }, [categoryId, setCategoryId, setOffset]);
+
+  // Pagination offset hesaplama
   useEffect(() => {
     const newOffset = (currentPage - 1) * limit;
     setOffset(newOffset);
   }, [currentPage, limit, setOffset]);
+
+  // Sorting
   const sortedProducts = useMemo(() => {
     const list = [...products];
 
@@ -38,25 +54,19 @@ const ShopPage = () => {
     return list;
   }, [products, sortType]);
 
+  // Pagination hesaplama
   const totalPages = Math.ceil(total / limit);
   const maxVisible = 4;
-
-  const startPage = Math.max(
-    1,
-    Math.min(currentPage - 1, totalPages - maxVisible + 1)
-  );
-
-  const endPage = Math.min(
-    totalPages,
-    startPage + maxVisible - 1
-  );
+  const startPage = Math.max(1, Math.min(currentPage - 1, totalPages - maxVisible + 1));
+  const endPage = Math.min(totalPages, startPage + maxVisible - 1);
 
   return (
     <>
       <BreadCrumbSection />
-      <SearchBar></SearchBar>
+      <SearchBar />
       <section className="w-full bg-white">
         <div className="container mx-auto px-6">
+          {/* Header: view + sort */}
           <div className="flex flex-col md:flex-row justify-between items-center py-6 gap-6">
             <p className="text-[#737373] text-sm font-bold">
               Showing {products.length} of {total} results
@@ -67,20 +77,14 @@ const ShopPage = () => {
 
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-3 border rounded-md ${viewMode === "grid"
-                    ? "bg-[#23A6F0] text-white"
-                    : "hover:bg-gray-100"
-                  }`}
+                className={`p-3 border rounded-md ${viewMode === "grid" ? "bg-[#23A6F0] text-white" : "hover:bg-gray-100"}`}
               >
                 <LayoutGrid size={18} />
               </button>
 
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-3 border rounded-md ${viewMode === "list"
-                    ? "bg-[#23A6F0] text-white"
-                    : "hover:bg-gray-100"
-                  }`}
+                className={`p-3 border rounded-md ${viewMode === "list" ? "bg-[#23A6F0] text-white" : "hover:bg-gray-100"}`}
               >
                 <List size={18} />
               </button>
@@ -97,27 +101,21 @@ const ShopPage = () => {
             </select>
           </div>
 
+          {/* Loading */}
           {loading && (
             <div className="text-center py-20 text-lg font-bold">
               Loading products...
             </div>
           )}
 
+          {/* Products Grid/List */}
           {!loading && (
-            <div
-              className={`grid gap-8 py-12 transition-all ${viewMode === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-                  : "grid-cols-1"
-                }`}
-            >
+            <div className={`grid gap-8 py-12 transition-all ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
               {sortedProducts.map((item) => (
-                <div
-                  key={item.id}
-                  className={viewMode === "list" ? "border-b pb-8" : ""}
-                >
+                <div key={item.id} className={viewMode === "list" ? "border-b pb-8" : ""}>
                   <ProductItem
                     id={item.id}
-                    image={item.images?.[0].url}
+                    image={item.images?.[0]?.url}
                     price={item.price?.toFixed(2)}
                     discounted={item.price?.toFixed(2)}
                     name={item.name}
@@ -128,6 +126,8 @@ const ShopPage = () => {
               ))}
             </div>
           )}
+
+          {/* Pagination */}
           <div className="flex justify-center py-16">
             <div className="flex border border-[#BDBDBD] rounded-lg overflow-hidden font-bold text-sm">
               <button
@@ -137,6 +137,7 @@ const ShopPage = () => {
               >
                 First
               </button>
+
               {startPage > 1 && (
                 <>
                   <button
@@ -145,31 +146,23 @@ const ShopPage = () => {
                   >
                     1
                   </button>
-                  {startPage > 2 && (
-                    <span className="px-4 py-4 border-r">...</span>
-                  )}
+                  {startPage > 2 && <span className="px-4 py-4 border-r">...</span>}
                 </>
               )}
-              {Array.from(
-                { length: endPage - startPage + 1 },
-                (_, i) => startPage + i
-              ).map((page) => (
+
+              {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`px-5 py-4 border-r ${currentPage === page
-                      ? "bg-[#23A6F0] text-white"
-                      : "text-[#23A6F0] hover:bg-gray-50"
-                    }`}
+                  className={`px-5 py-4 border-r ${currentPage === page ? "bg-[#23A6F0] text-white" : "text-[#23A6F0] hover:bg-gray-50"}`}
                 >
                   {page}
                 </button>
               ))}
+
               {endPage < totalPages && (
                 <>
-                  {endPage < totalPages - 1 && (
-                    <span className="px-4 py-4 border-r">...</span>
-                  )}
+                  {endPage < totalPages - 1 && <span className="px-4 py-4 border-r">...</span>}
                   <button
                     onClick={() => setCurrentPage(totalPages)}
                     className="px-5 py-4 border-r text-[#23A6F0]"
@@ -178,20 +171,16 @@ const ShopPage = () => {
                   </button>
                 </>
               )}
+
               <button
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(p + 1, totalPages))
-                }
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className="px-6 py-4 disabled:bg-[#F3F3F3]"
               >
                 Next
               </button>
-
             </div>
           </div>
-
-
         </div>
       </section>
 

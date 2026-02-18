@@ -1,4 +1,4 @@
-import { useEffect,useRef } from "react";
+import { useEffect, useRef } from "react";
 import React, { useState, useContext, } from "react";
 import {
   Phone,
@@ -21,20 +21,15 @@ import { fetchCategories } from "../store/categoriesSlice";
 import md5 from "md5";
 import { Link, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-const categories = [
-  { id: 1, name: "Tshirt" },
-  { id: 2, name: "Shoes"},
-  { id: 3, name: "Jacket"},
-  { id: 4, name: "Dress" },
-  { id: 0, name: "Accessories"},
-];
+
 const Header = () => {
+  const { list: categories, status } = useSelector((state) => state.categories);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
   const [shopOpen, setShopOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const { setShowSearch, getCartCount ,setCategoryId,setOffset} = useContext(ShopContext);
+  const { setShowSearch, getCartCount, setCategoryId, setOffset } = useContext(ShopContext);
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -45,21 +40,38 @@ const Header = () => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-const dropdownRef = useRef();
+  const dropdownRef = useRef();
 
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setShopOpen(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShopOpen(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const gravatarUrl = user
     ? `https://www.gravatar.com/avatar/${hash}?d=identicon`
     : "";
+  const createCategoryLink = (cat) => {
+    if (!cat) return "/shop";
+
+    const gender = cat.gender || cat.code || "unisex";
+console.log(cat.gender)
+    const name = cat.title
+      ?.toLowerCase()
+      .replaceAll("ı", "i")
+      .replaceAll("ğ", "g")
+      .replaceAll("ü", "u")
+      .replaceAll("ş", "s")
+      .replaceAll("ö", "o")
+      .replaceAll("ç", "c")
+      .replaceAll(" ", "-");
+
+    return `/shop/${gender}/${name}/${cat.id}`;
+  };
 
   return (
     <header className="w-full">
@@ -107,26 +119,59 @@ useEffect(() => {
               </button>
 
               {shopOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-6
-                    bg-white shadow-2xl border
-                    px-6 py-3 gap-12 z-50 flex">
+             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-6 w-[280px]
+    bg-white shadow-2xl border
+    px-6 py-3 gap-12 z-50 flex">
 
-                  <div className="flex flex-col">
+  <div className="flex flex-col md:flex-row w-full justify-between">
+    {/* Kadın Kategorileri */}
+    {categories.some(cat => cat.gender?.toLowerCase() === "k") && (
+      <div>
+        <span className="font-bold py-1 text-gray-700">Kadın</span>
+        {categories
+          .filter(cat => cat.gender?.toLowerCase() === "k")
+          .map(cat => (
+            <Link
+              key={cat.id}
+              to={createCategoryLink(cat)}
+              onClick={() => {
+                setCategoryId(cat.id);
+                setOffset(0);
+                setShopOpen(false);
+              }}
+              className="block py-1 text-gray-500 hover:text-[#23A6F0]"
+            >
+              {cat.title}
+            </Link>
+          ))}
+      </div>
+    )}
 
-                    {categories.map((item) => (
-                      <Link
-                        key={item.id}
-                        to={`/shop`}
-                        onClick={() => {setCategoryId(item.id); setOffset(0);}}
-                        className="block py-1 text-gray-500 hover:text-[#23A6F0]"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+    {/* Erkek Kategorileri */}
+    {categories.some(cat => cat.gender?.toLowerCase() === "e") && (
+      <div>
+        <span className="font-bold py-1 text-gray-700 mt-2">Erkek</span>
+        {categories
+          .filter(cat => cat.gender?.toLowerCase() === "e")
+          .map(cat => (
+            <Link
+              key={cat.id}
+              to={createCategoryLink(cat)}
+              onClick={() => {
+                setCategoryId(cat.id);
+                setOffset(0);
+                setShopOpen(false);
+              }}
+              className="block py-1 text-gray-500 hover:text-[#23A6F0]"
+            >
+              {cat.title}
+            </Link>
+          ))}
+      </div>
+    )}
+  </div>
+</div>
 
-
-                </div>
               )}
             </div>
 
