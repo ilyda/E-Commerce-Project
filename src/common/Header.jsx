@@ -174,10 +174,7 @@ console.log(cat.gender)
 
               )}
             </div>
-
-
             <Link to="/about">About</Link>
-            <Link to="/">Blog</Link>
             <Link to="/contact">Contact</Link>
             <Link to="/teams">Teams</Link>
           </nav>
@@ -208,20 +205,20 @@ console.log(cat.gender)
             </span>
 
             {location.pathname.startsWith("/shop") && (
-              <div className="relative hidden sm:block">
+              <div className="relative hidden md:flex ">
                 <Search size={18} onClick={() => setShowSearch(true)} />
               </div>
             )}
 
-            <Link to="/basket" className="relative hidden sm:block">
+            <Link to="/basket" className="relative hidden md:flex ">
               <ShoppingCart size={18} />
               <span className="absolute -top-0 -right-3 text-xs">{getCartCount()}</span>
             </Link>
 
 
-            <div className="relative hidden sm:block">
+            <div className="relative hidden md:flex ">
               <Heart size={18} />
-              <span className="absolute -top-0 -right-3 text-xs">1</span>
+              <span className="absolute -top-0 -right-3 text-xs">0</span>
             </div>
 
 
@@ -238,7 +235,6 @@ console.log(cat.gender)
             <Link to="/" onClick={() => setOpen(false)}>Home</Link>
             <Link to="/shop" onClick={() => setOpen(false)}>Shop</Link>
             <Link to="/about" onClick={() => setOpen(false)}>About</Link>
-            <Link to="/" onClick={() => setOpen(false)}>Blog</Link>
             <Link to="/contact" onClick={() => setOpen(false)}>Contact</Link>
             <Link to="/teams" onClick={() => setOpen(false)}>Teams</Link>
 
@@ -259,14 +255,17 @@ console.log(cat.gender)
               <Heart size={18} />
               <span className="text-xs ml-3">1</span>
             </div>
-            <div className="flex items-center gap-3">
-              <img
-                src={gravatarUrl}
-                alt="avatar"
-                className="w-8 h-8 rounded-full"
-              />
-              <span>{user.name}</span>
-            </div>
+      {user && (
+  <div className="flex items-center gap-3">
+    <img
+      src={gravatarUrl}
+      alt="avatar"
+      className="w-8 h-8 rounded-full"
+    />
+    <span>{user.name}</span>
+  </div>
+)}
+
           </div>
         )}
       </div>

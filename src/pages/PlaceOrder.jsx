@@ -132,7 +132,7 @@ export default function PlaceOrder() {
       setSelectedAddress(null);
       setSelectedCard(null);
       allRemoveFromCart();
-      setTimeout(() => navigate("/order-success"), 1500);
+      setTimeout(() => navigate("/order-success"), 100);
       
     } catch (err) {
       console.log(err?.response?.data || err);
